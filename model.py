@@ -19,8 +19,18 @@ def softmax(logits, axis=-1):
     # TODO: Convert an array of logits into a probability distribution along a given axis
     return np.exp(log_softmax(logits, axis))
 
-# Step 3 - gather_token_logprobs (not yet solved)
-# TODO: implement
+# Step 3 - gather_token_logprobs
+def gather_token_logprobs(log_probs, token_ids):
+    # TODO: Extract the log-probability of each observed token from a full vocab log-prob tensor...
+    log_probs = np.asarray(log_probs)
+    token_ids = np.asarray(token_ids, dtype=np.int64)
+
+    B, T, V = log_probs.shape
+    assert token_ids.shape == (B, T), \
+        f"token_ids must be {(B, T)}, got {token_ids.shape}"
+
+    # Index with an extra trailing axis, then drop it.
+    return np.take_along_axis(log_probs, token_ids[..., None], axis=-1)[..., 0]
 
 # Step 4 - masked_sequence_logprob (not yet solved)
 # TODO: implement
